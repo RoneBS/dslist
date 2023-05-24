@@ -1,7 +1,9 @@
 package com.ronesilveira.dslist.services;
 
+import com.ronesilveira.dslist.dto.GameDTO;
 import com.ronesilveira.dslist.dto.GameMinDTO;
 import com.ronesilveira.dslist.entities.Game;
+import com.ronesilveira.dslist.projections.GameMinProjection;
 import com.ronesilveira.dslist.repositories.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,5 +25,11 @@ public class GameService {
     public List<GameMinDTO> findAll() {
        List<Game> result = gameRepository.findAll();
        return result.stream().map(x -> new GameMinDTO(x)).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<GameMinDTO> findByList(Long listId) {
+        List<GameMinProjection> result = gameRepository.searchByList(listId);
+        return result.stream().map(x -> new GameMinDTO(x)).toList();
     }
 }
